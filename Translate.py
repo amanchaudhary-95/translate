@@ -15,7 +15,7 @@ st.set_page_config(page_title='ML Translator', page_icon=img, layout="wide", ini
 st.markdown('<style>div.block-container{padding-top:0rem;}</style>', unsafe_allow_html=True)
 st.markdown("""<style> header {visibility: hidden;} </style>""", unsafe_allow_html=True)
 
-@st.cache_resource(show_spinner='Loading model...It may take a while...Please wait...')
+@st.cache_resource(show_spinner='Loading model for the first time...It may take a while...Please wait...')
 def load_model():
     model_name = "facebook/nllb-200-distilled-600M"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -52,8 +52,8 @@ cont = st.container(border=True, height=250)
 resp = ''
 if cont1.form_submit_button("Translate"):
     with cont2:
+        tokenizer, model = load_model()
         with st.spinner("Translating..."):
-            tokenizer, model = load_model()
             tokenizer.src_lang = lang_dict[in_lang]
             inputs = tokenizer(text=text, return_tensors="pt")
             translated_tokens = model.generate(**inputs, max_length=1500, forced_bos_token_id=tokenizer.lang_code_to_id[lang_dict[out_lang]])
