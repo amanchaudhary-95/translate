@@ -4,8 +4,8 @@ import time
 from PIL import Image
 
 img = Image.open('./.streamlit/logo.png')
-dev = """:blue[**NLP Application - Machine Translation App**]  
-    **Developed by** : :blue[Group 58]  
+dev = """:blue[**NLP Application - Machine Translation**]  
+    **Developed by** : :blue[**Group 58**]  
     AMAN CHAUDHARY (2022aa05016)  
     ANEESH DAS (2022aa05135)  
     NAVINDRA RAY (2022aa05024)  
@@ -47,20 +47,8 @@ cont1 = c1.form('form', border=True)
 cont2 = c2.container(border=True, height=240)
 cont2.write(':blue[**Translated Text:**]')
 text = cont1.text_area("Enter Text", placeholder="Enter text to translate", label_visibility="collapsed", height=150, key='text')
+
 cont = st.container(border=True, height=250)
-
-resp = ''
-if cont1.form_submit_button("Translate"):
-    with cont2:
-        tokenizer, model = load_model()
-        with st.spinner("Translating..."):
-            tokenizer.src_lang = lang_dict[in_lang]
-            inputs = tokenizer(text=text, return_tensors="pt")
-            translated_tokens = model.generate(**inputs, max_length=1500, forced_bos_token_id=tokenizer.lang_code_to_id[lang_dict[out_lang]])
-            resp = tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
-            # cont2.write_stream(stream_text(resp))
-            cont2.write(resp)
-
 cont.write('##### Demo Sentences:')
 cont.write("**Nepali** : सोमबारका दिन, स्ट्यानफोर्ड युनिभर्सिटी स्कुल अफ मेडिसिनका वैज्ञानिकहरूले एक नयाँ डायग्नोस्टिक उपकरणको आविष्कारको घोषणा गरे जसले कोषहरूलाई प्रकारका आधारमा क्रमबद्ध गर्न सक्दछः एउटा सानो प्रिन्ट गर्न सकिने चिप जुन मानक ईंकजेट प्रिन्टरहरू प्रयोग गरेर सम्भवतः लगभग एक अमेरिकी सेन्टको लागतमा निर्माण गर्न सकिन्छ।")
 cont.write("**Maori** : I te Mane, i kī ake ngā kaipūtaiao nō Stanford University School of Medicine mō te hanganga o tētahi taputapu whakatau e āhei ai te wewete i ngā pūtau ki ana momo: mō te 1 hēneti U.S pea, he rehu-mihini tā iti nei e taea ana te hanga mā ngā mihini tā inkjet noa.")
@@ -71,3 +59,14 @@ cont.write("**Nepali** : कामदारहरूले प्रायः �
 cont.write("**Maori** : He nui ngā wā me whai whakaaetanga ngā kaimahi i ō rātou rangatira mō ngā whakatau katoa, ā, e hiahiatia ana ka whai rātou i ngā tohutohu o ō rātou rangatira horekau te pātai atu.")
 cont.write("**English (Google Translator)** : Employees often have to get the approval of their superiors for any decision they make and are expected to follow their instructions without question.")
 # cont.write("**Hindi (Google Translator)** : कर्मचारियों को अक्सर अपने किसी भी निर्णय के लिए अपने वरिष्ठों की मंजूरी लेनी पड़ती है और उनसे बिना किसी सवाल के उनके निर्देशों का पालन करने की अपेक्षा की जाती है।")
+
+if cont1.form_submit_button("Translate"):
+    with cont2:
+        tokenizer, model = load_model()
+        with st.spinner("Translating..."):
+            tokenizer.src_lang = lang_dict[in_lang]
+            inputs = tokenizer(text=text, return_tensors="pt")
+            translated_tokens = model.generate(**inputs, max_length=1500, forced_bos_token_id=tokenizer.lang_code_to_id[lang_dict[out_lang]])
+            resp = tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
+            # cont2.write_stream(stream_text(resp))
+            cont2.write(resp)
